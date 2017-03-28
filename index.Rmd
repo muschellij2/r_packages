@@ -32,7 +32,7 @@ Use RStudio and the `devtools` package.  It's easier.
 install.packages("devtools")
 ```
 
-In RStudio, File -> New Project -> R Package, with a name:
+In RStudio, File -> New Project -> New Directory -> R Package, with a name:
 
 > - must start with letter
 > - no underscores
@@ -43,9 +43,9 @@ In RStudio, File -> New Project -> R Package, with a name:
 
 Go to Build -> Configure Build Tools
 
-![](figures/build_tools.png)
-
 Add `--as-cran` to "Check Package" (useful later)
+
+<img src="figures/build_tools.png" style="width: 45%; display: block; margin: auto;">
 
 
 ## Setting Up
@@ -56,6 +56,146 @@ Click Generate documents with Roxygen.  If that is gray, install `roxygen2`:
 install.packages("roxygen2")
 ```
 
-![](figures/roxygen.png)
+<img src="figures/roxygen.png" style="width: 50%; display: block; margin: auto;">
 
 Click "Configure" - click all the boxes.
+
+## Configuring the Setup
+
+> - Delete the `man` folder 
+>   - `roxygen2` will create the documentation automatically
+> - Delete NAMESPACE file (we will discuss later)
+> - `roxygen2` will create the documentation automatically
+
+
+## DESCRIPTION file
+
+In the RStudio project, go to "Go to file/function" search bar on the menu bar.
+    
+>  - This searches through the files in the package.
+>    - Also searches for **function names** and can go to that function in the file
+
+Type "DESCRIPTION" and open that file.
+
+## DESCRIPTION file
+
+> - "Title - What the Package Does (Title Case)
+> - "Author: YOURNAME"
+> - "Maintainer: YOURNAME <your@email.com>"
+> - "Description: Use paragraph prose here.  Don't start with word package"
+    Use four spaces when indenting paragraphs within the Description.
+> - "License: ", one of GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
+BSD_2_clause BSD_3_clause MIT
+
+## DESCRIPTION file: additional fields
+
+> - Imports: package1, package2
+>   - packages with specific functions called in package
+> - Depends: package3, package5
+>   - packages with **ALL** functions loaded from package
+> - Suggests: package4, package6
+>   - used in **examples** or **vignettes**
+
+## Roxygen2
+
+Roxygen allows for functions and documentation in the same file. Let's make a function:
+
+```{r eval = FALSE}
+top = function(x, n) {
+  print(x[1:n, 1:n])
+}
+```
+
+Save this to `top.R` file in `R/` (where R functions are).  Delete `hello.R` file.
+
+## Roxygen2
+
+Highlight the following code:
+```{r eval = FALSE}
+top = function(x, n) {
+```
+
+Go to Code -> Insert Roxygen Skeleton
+
+## Roxygen Skeleton:
+
+Output:
+```
+#' Title
+#'
+#' @param x 
+#' @param n 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+```
+
+
+## Roxygen Skeleton:
+
+Add `@title` and `@description` tags:
+
+```
+#' @title
+#' @description
+#'
+#' @param x 
+#' @param n 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+```
+
+
+## Roxygen Skeleton:
+
+> - `@param` stands for a parameter/argument for that function.  
+> - `@return` denotes what the function returns.  This is required.  
+> - `@export` - when people install your package, can they use this function
+>   - non-exported functions are usually helpers, really small, or not fully formed yet
+> - `@examples` - code to show how the function works.  Wrap functions in `\dontrun{}` if not wanted to run
+
+
+## Roxygen Skeleton:
+
+```
+#' @title Print the top of a matrix
+#' @description \code{top} is a small function to not just present the first rows
+#' of a matrix, but also the first number of columns
+#'
+#' @param x a \code{matrix}
+#' @param n Number of rows and columns to display of the matrix
+#'
+#' @return A \code{NULL}
+#' @export
+#'
+#' @examples 
+#' mat = matrix(rnorm(100), nrow = 10)
+#' top(mat, n = 4)
+#' \dontrun{
+#'    top(mat, n = 10)
+#' }
+```
+
+
+## NAMESPACE
+
+The `NAMESPACE` files tells the R package what to import and export.  In Roxygen:
+
+> - `@export` - adds this to the NAMESPACE file
+>     - when package is installed, users can call this function
+> - `@import` - in roxygen, if you want to import a **package**, you say `@import PACKAGENAME`
+>     - imports **ALL** functions from that package
+>     - if package is listed under Depends in DESCRIPTION, then the **whole package** is loaded when you load your package
+>     - otherwise it simply exposes them for your package to use them, but not the user, users still have to do `library(PACKAGENAME)`
+> - `@importFrom` - in roxygen, if you want to import a **function**, you say `@import PACKAGENAME func1 func2`
+>     - only imports these functions.  Better way of doing things.
+>     - if `pkgA` has function `A` and `pkgB` has functions `A` and `B`, if `@import pkgA A`,  `@import pkgB B`, then if you call `A()`, R knows it's from `pkgA`
+>     - you must import anything explicitly other than from the `base` package, includying anything from `stats` (e.g. `quantile`) or `graphics` (e.g. `hist`)
+    
+
+
