@@ -1,0 +1,61 @@
+---
+title: "R Packages"
+author: "John Muschelli"
+date: "March 28, 2017"
+output: 
+  ioslides_presentation:
+    widescreen: yes
+    incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# What are R Packages?
+
+## R Packages {.build}
+
+1.  Sets of Functions
+2.  Set of Functions + Documentation
+3.  Set of Functions + Documentation + Data 
+4.  Set of Functions + Documentation + Data + Vignettes
+5.  Set of Functions + Documentation + Data + Vignettes + Versions
+6.  Set of Functions + Documentation + Data + Vignettes + Versions + Dependencies
+
+
+## Starting Up
+
+Use RStudio and the `devtools` package.  It's easier.
+
+```{r, eval = FALSE}
+install.packages("devtools")
+```
+
+In RStudio, File -> New Project -> R Package, with a name:
+
+> - must start with letter
+> - no underscores
+> - periods allowable or use CamelCase
+> - can have numbers
+
+## Setting Up
+
+Go to Build -> Configure Build Tools
+
+![](figures/build_tools.png)
+
+Add `--as-cran` to "Check Package" (useful later)
+
+
+## Setting Up
+
+Click Generate documents with Roxygen.  If that is gray, install `roxygen2`:
+
+```{r, eval = FALSE}
+install.packages("roxygen2")
+```
+
+![](figures/roxygen.png)
+
+Click "Configure" - click all the boxes.
