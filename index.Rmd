@@ -5,23 +5,22 @@ date: "March 28, 2017"
 output: 
   ioslides_presentation:
     widescreen: yes
-    incremental: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # What are R Packages?
 
 ## R Packages {.build}
 
-1.  Sets of Functions
-2.  Set of Functions + Documentation
-3.  Set of Functions + Documentation + Data 
-4.  Set of Functions + Documentation + Data + Vignettes
-5.  Set of Functions + Documentation + Data + Vignettes + Versions
-6.  Set of Functions + Documentation + Data + Vignettes + Versions + Dependencies
+> 1.  Sets of Functions
+> 2.  Set of Functions + Documentation
+> 3.  Set of Functions + Documentation + Data 
+> 4.  Set of Functions + Documentation + Data + Vignettes
+> 5.  Set of Functions + Documentation + Data + Vignettes + Versions
+> 6.  Set of Functions + Documentation + Data + Vignettes + Versions + Dependencies
 
 
 ## Starting Up
@@ -34,10 +33,10 @@ install.packages("devtools")
 
 In RStudio, File -> New Project -> New Directory -> R Package, with a name:
 
-> - must start with letter
-> - no underscores
-> - periods allowable or use CamelCase
-> - can have numbers
+- must start with letter
+- no underscores
+- periods allowable or use CamelCase
+- can have numbers
 
 ## Setting Up
 
@@ -62,39 +61,39 @@ Click "Configure" - click all the boxes.
 
 ## Configuring the Setup
 
-> - Delete the `man` folder 
->   - `roxygen2` will create the documentation automatically
-> - Delete NAMESPACE file (we will discuss later)
-> - `roxygen2` will create the documentation automatically
+- Delete the `man` folder 
+   - `roxygen2` will create the documentation automatically
+- Delete NAMESPACE file (we will discuss later)
+- `roxygen2` will create the documentation automatically
 
 
 ## DESCRIPTION file
 
 In the RStudio project, go to "Go to file/function" search bar on the menu bar.
     
->  - This searches through the files in the package.
->    - Also searches for **function names** and can go to that function in the file
+- This searches through the files in the package.
+  - Also searches for **function names** and can go to that function in the file
 
 Type "DESCRIPTION" and open that file.
 
 ## DESCRIPTION file
 
-> - "Title - What the Package Does (Title Case)
-> - "Author: YOURNAME"
-> - "Maintainer: YOURNAME <your@email.com>"
-> - "Description: Use paragraph prose here.  Don't start with word package"
+- "Title - What the Package Does (Title Case)
+- "Author: YOURNAME"
+- "Maintainer: YOURNAME <your@email.com>"
+- "Description: Use paragraph prose here.  Don't start with word package"
     Use four spaces when indenting paragraphs within the Description.
-> - "License: ", one of GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
+- "License: ", one of GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
 BSD_2_clause BSD_3_clause MIT
 
 ## DESCRIPTION file: additional fields
 
-> - Imports: package1, package2
->   - packages with specific functions called in package
-> - Depends: package3, package5
->   - packages with **ALL** functions loaded from package
-> - Suggests: package4, package6
->   - used in **examples** or **vignettes**
+- Imports: package1, package2
+- packages with specific functions called in package
+- Depends: package3, package5
+  - packages with **ALL** functions loaded from package
+- Suggests: package4, package6
+  - used in **examples** or **vignettes**
 
 ## Roxygen2
 
@@ -102,7 +101,9 @@ Roxygen allows for functions and documentation in the same file. Let's make a fu
 
 ```{r eval = FALSE}
 top = function(x, n) {
-  print(x[1:n, 1:n])
+  xx = x[1:n, 1:n]
+  hist(xx)
+  print(xx)
 }
 ```
 
@@ -186,16 +187,32 @@ Add `@title` and `@description` tags:
 
 The `NAMESPACE` files tells the R package what to import and export.  In Roxygen:
 
-> - `@export` - adds this to the NAMESPACE file
->     - when package is installed, users can call this function
-> - `@import` - in roxygen, if you want to import a **package**, you say `@import PACKAGENAME`
->     - imports **ALL** functions from that package
->     - if package is listed under Depends in DESCRIPTION, then the **whole package** is loaded when you load your package
->     - otherwise it simply exposes them for your package to use them, but not the user, users still have to do `library(PACKAGENAME)`
-> - `@importFrom` - in roxygen, if you want to import a **function**, you say `@import PACKAGENAME func1 func2`
->     - only imports these functions.  Better way of doing things.
->     - if `pkgA` has function `A` and `pkgB` has functions `A` and `B`, if `@import pkgA A`,  `@import pkgB B`, then if you call `A()`, R knows it's from `pkgA`
->     - you must import anything explicitly other than from the `base` package, includying anything from `stats` (e.g. `quantile`) or `graphics` (e.g. `hist`)
-    
+- `@export` - adds this to the NAMESPACE file
+   - when package is installed, users can call this function
+- `@import` - in roxygen, if you want to import a **package**, you say `@import PACKAGENAME`
+   - imports **ALL** functions from that package
+   - if package is listed under Depends in DESCRIPTION, then the **whole package** is loaded when you load your package
+   - otherwise it simply exposes them for your package to use them, but not the user, users still have to do `library(PACKAGENAME)`
+
+## NAMESPACE
+
+- `@importFrom` - in roxygen, if you want to import a **function**, you say `@import PACKAGENAME func1 func2`
+   - only imports these functions.  Better way of doing things.
+   - if `pkgA` has function `A` and `pkgB` has functions `A` and `B`, if `@import pkgA A`,  `@import pkgB B`, then if you call `A()`, R knows it's from `pkgA`
+   - you must import anything explicitly other than from the `base` package, includying anything from `stats` (e.g. `quantile`) or `graphics` (e.g. `hist`)
+
+Add `@importFrom graphics hist` to your top.R file
+
+
+## Build and Reload
+
+- Go to Build -> Build and Reload the package
+    - First time you may see some warnings (no NAMESPACE file!)
+    - Rerunning should get rid of these
+    - look in the folders
+- Then try Build -> Check Package
+
+
+
 
 
