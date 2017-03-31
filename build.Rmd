@@ -1,7 +1,6 @@
 ---
 title: "Building Distributable Packages"
 author: "John Muschelli"
-date: "March 28, 2017"
 output: 
   ioslides_presentation:
     widescreen: yes
