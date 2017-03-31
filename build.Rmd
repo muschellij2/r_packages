@@ -18,9 +18,11 @@ knitr::opts_chunk$set(echo = TRUE)
 - Rbuildignore
 - Including "data" in a package
 - Installing from GitHub
-- Checking with Travis CI/Appveyor/Coveralls
 - Unit Testing
-- Building a source tarball
+- Version Numbering
+- Checking Packages
+- Checking with Travis CI/Appveyor/Coveralls
+
 
 ## Quick naming convention guidelines
 
@@ -34,6 +36,24 @@ These are personal but serve me well:
 - Don't make filenames too long (over 25-30 characters max)
 - Never put spaces in filenames.
 
+
+## Example - 2 functions in the same help
+
+See `?log` for example.  
+```
+#' @title Best title ever
+#' @description Best description
+#' @export
+best = function(){
+  print("you're the best around!")
+}
+
+#' @rdname best
+#' @export
+around = function() {
+  print("nothing's gonna ever keep you down!")
+}
+```
 ## Package Vignettes
 
 Vignettes are package tutorials to show how the package should work
@@ -102,25 +122,6 @@ anywhere in the code.
 There are ways to include non-rda files using `inst`, but we won't cover that here
 
 
-
-## Installing from GitHub
-
-If you have pushed your package to GitHub, you can install it using:
-
-```{r, eval = FALSE}
-devtools::install_github("YOURUSERNAME/mypkg")
-```
-where `mypkg` is the name of the repo.  Make the repo name the same name as the package. It's just easier.  This may be replaced in the future by:
-```{r, eval = FALSE}
-remotes::install_github("YOURUSERNAME/mypkg")
-```
-
-## Checking with Travis CI/Appveyor/Coveralls
-
-`use_travis`, `use_appveyor`, `use_coverage`
-
-These will add YAML files to your packages on Github for testing in Linux/Mac (Travis), Windows (Appveyor), and Code coverage (Coveralls/Travis).
-
 ## Version Numbering
 
 From http://r-pkgs.had.co.nz/release.html#release-version use `major.minor.patch.dev`:
@@ -154,15 +155,56 @@ test_that("test_vectors", {
 })
 ```
 
-## Building a source tarball
+## Checking a Package
+
+Overall, you should check your package to make sure it works.
+
+In increasing order of requirements a package must:
+
+1.  Build - `devtools::build()`
+2.  Install - `devtools::install()`
+3.  Check - `devtools::check()`
+4.  Check with CRAN requirements - `devtools::check(args = '--as-cran')` or `rhub::check_for_cran()`
+5.  Check with Bioconductor requirements - `BiocCheck::BiocCheck(package = "package.tar.gz")`
+
+## Checking a Package
 
 When releasing a package to CRAN, it must pass `R CMD check --as-cran`.  This is why we put that option in before.  
 
 - Build -> Check Package - should have no errors, warnings, and likely no notes
 - Build -> Build Source Package - this will bundle your package to an installable file.  
 - Need to use `R-devel CMD check --as-cran` where `R-devel` is the development version of the packag
-    - can do all of this on Travis or Win Builder (https://win-builder.r-project.org/)
+    - can do all of this on Travis and Appveyor or Win Builder (https://win-builder.r-project.org/)
 - Also see the `rhub` package: https://github.com/r-hub/rhub
+    - Makes this easy and all online
+
+
+## Installing from GitHub
+
+If you have pushed your package to GitHub, you can install it using:
+
+```{r, eval = FALSE}
+devtools::install_github("YOURUSERNAME/mypkg")
+```
+where `mypkg` is the name of the repo.  Make the repo name the same name as the package. It's just easier.  This may be replaced in the future by:
+```{r, eval = FALSE}
+remotes::install_github("YOURUSERNAME/mypkg")
+```
+
+## Checking with Travis CI/Appveyor/Coveralls
+
+`use_travis`, `use_appveyor`, `use_coverage`
+
+These will add YAML files to your packages on Github for testing in Linux/Mac (Travis), Windows (Appveyor), and Code coverage (Coveralls/Travis).
+
+Go to https://travis-ci.org/, sign up with GitHub, sync account, then turn "on" the travis CI for that package.
+
+Go to https://www.appveyor.com/ and do the same thing.
+
+And then https://coveralls.io/ or https://codecov.io/ and do the same thing
+
+PUSH!
+
 
 
 

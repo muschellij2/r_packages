@@ -106,9 +106,10 @@
 <li>Rbuildignore</li>
 <li>Including &quot;data&quot; in a package</li>
 <li>Installing from GitHub</li>
-<li>Checking with Travis CI/Appveyor/Coveralls</li>
 <li>Unit Testing</li>
-<li>Building a source tarball</li>
+<li>Version Numbering</li>
+<li>Checking Packages</li>
+<li>Checking with Travis CI/Appveyor/Coveralls</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Quick naming convention guidelines</h2></hgroup><article  id="quick-naming-convention-guidelines">
@@ -127,6 +128,23 @@
 <li>Don&#39;t make filenames too long (over 25-30 characters max)</li>
 <li>Never put spaces in filenames.</li>
 </ul>
+
+</article></slide><slide class=''><hgroup><h2>Example - 2 functions in the same help</h2></hgroup><article  id="example---2-functions-in-the-same-help">
+
+<p>See <code>?log</code> for example.</p>
+
+<pre >#&#39; @title Best title ever
+#&#39; @description Best description
+#&#39; @export
+best = function(){
+  print(&quot;you&#39;re the best around!&quot;)
+}
+
+#&#39; @rdname best
+#&#39; @export
+around = function() {
+  print(&quot;nothing&#39;s gonna ever keep you down!&quot;)
+}</pre>
 
 </article></slide><slide class=''><hgroup><h2>Package Vignettes</h2></hgroup><article  id="package-vignettes">
 
@@ -194,22 +212,6 @@ save(blah, file = &quot;data/blah.rda&quot;, compression_level = 9)</pre>
 
 <p>There are ways to include non-rda files using <code>inst</code>, but we won&#39;t cover that here</p>
 
-</article></slide><slide class=''><hgroup><h2>Installing from GitHub</h2></hgroup><article  id="installing-from-github">
-
-<p>If you have pushed your package to GitHub, you can install it using:</p>
-
-<pre class = 'prettyprint lang-r'>devtools::install_github(&quot;YOURUSERNAME/mypkg&quot;)</pre>
-
-<p>where <code>mypkg</code> is the name of the repo. Make the repo name the same name as the package. It&#39;s just easier. This may be replaced in the future by:</p>
-
-<pre class = 'prettyprint lang-r'>remotes::install_github(&quot;YOURUSERNAME/mypkg&quot;)</pre>
-
-</article></slide><slide class=''><hgroup><h2>Checking with Travis CI/Appveyor/Coveralls</h2></hgroup><article  id="checking-with-travis-ciappveyorcoveralls">
-
-<p><code>use_travis</code>, <code>use_appveyor</code>, <code>use_coverage</code></p>
-
-<p>These will add YAML files to your packages on Github for testing in Linux/Mac (Travis), Windows (Appveyor), and Code coverage (Coveralls/Travis).</p>
-
 </article></slide><slide class=''><hgroup><h2>Version Numbering</h2></hgroup><article  id="version-numbering">
 
 <p>From <a href='http://r-pkgs.had.co.nz/release.html#release-version' title=''>http://r-pkgs.had.co.nz/release.html#release-version</a> use <code>major.minor.patch.dev</code>:</p>
@@ -242,7 +244,21 @@ test_that(&quot;test_vectors&quot;, {
   expect_error(top(1:3))
 })</pre>
 
-</article></slide><slide class=''><hgroup><h2>Building a source tarball</h2></hgroup><article  id="building-a-source-tarball">
+</article></slide><slide class=''><hgroup><h2>Checking a Package</h2></hgroup><article  id="checking-a-package">
+
+<p>Overall, you should check your package to make sure it works.</p>
+
+<p>In increasing order of requirements a package must:</p>
+
+<ol>
+<li>Build - <code>devtools::build()</code></li>
+<li>Install - <code>devtools::install()</code></li>
+<li>Check - <code>devtools::check()</code></li>
+<li>Check with CRAN requirements - <code>devtools::check(args = &#39;--as-cran&#39;)</code> or <code>rhub::check_for_cran()</code></li>
+<li>Check with Bioconductor requirements - <code>BiocCheck::BiocCheck(package = &quot;package.tar.gz&quot;)</code></li>
+</ol>
+
+</article></slide><slide class=''><hgroup><h2>Checking a Package</h2></hgroup><article  id="checking-a-package-1">
 
 <p>When releasing a package to CRAN, it must pass <code>R CMD check --as-cran</code>. This is why we put that option in before.</p>
 
@@ -252,10 +268,38 @@ test_that(&quot;test_vectors&quot;, {
 <li>Need to use <code>R-devel CMD check --as-cran</code> where <code>R-devel</code> is the development version of the packag
 
 <ul>
-<li>can do all of this on Travis or Win Builder (<a href='https://win-builder.r-project.org/' title=''>https://win-builder.r-project.org/</a>)</li>
+<li>can do all of this on Travis and Appveyor or Win Builder (<a href='https://win-builder.r-project.org/' title=''>https://win-builder.r-project.org/</a>)</li>
 </ul></li>
-<li>Also see the <code>rhub</code> package: <a href='https://github.com/r-hub/rhub' title=''>https://github.com/r-hub/rhub</a></li>
-</ul></article></slide>
+<li>Also see the <code>rhub</code> package: <a href='https://github.com/r-hub/rhub' title=''>https://github.com/r-hub/rhub</a>
+
+<ul>
+<li>Makes this easy and all online</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Installing from GitHub</h2></hgroup><article  id="installing-from-github">
+
+<p>If you have pushed your package to GitHub, you can install it using:</p>
+
+<pre class = 'prettyprint lang-r'>devtools::install_github(&quot;YOURUSERNAME/mypkg&quot;)</pre>
+
+<p>where <code>mypkg</code> is the name of the repo. Make the repo name the same name as the package. It&#39;s just easier. This may be replaced in the future by:</p>
+
+<pre class = 'prettyprint lang-r'>remotes::install_github(&quot;YOURUSERNAME/mypkg&quot;)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Checking with Travis CI/Appveyor/Coveralls</h2></hgroup><article  id="checking-with-travis-ciappveyorcoveralls">
+
+<p><code>use_travis</code>, <code>use_appveyor</code>, <code>use_coverage</code></p>
+
+<p>These will add YAML files to your packages on Github for testing in Linux/Mac (Travis), Windows (Appveyor), and Code coverage (Coveralls/Travis).</p>
+
+<p>Go to <a href='https://travis-ci.org/' title=''>https://travis-ci.org/</a>, sign up with GitHub, sync account, then turn &quot;on&quot; the travis CI for that package.</p>
+
+<p>Go to <a href='https://www.appveyor.com/' title=''>https://www.appveyor.com/</a> and do the same thing.</p>
+
+<p>And then <a href='https://coveralls.io/' title=''>https://coveralls.io/</a> or <a href='https://codecov.io/' title=''>https://codecov.io/</a> and do the same thing</p>
+
+<p>PUSH!</p></article></slide>
 
 
   <slide class="backdrop"></slide>
