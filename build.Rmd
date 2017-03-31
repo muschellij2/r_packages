@@ -1,5 +1,5 @@
 ---
-title: "Building Distributable Packages"
+title: "Building Distributable R Packages"
 author: "John Muschelli"
 output: 
   ioslides_presentation:
